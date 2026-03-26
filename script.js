@@ -2,12 +2,18 @@ const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
 const chat = document.getElementById("chat");
 
-// 📱 Get screen bounds
-function moveButton(e) {
-  const btnRect = noBtn.getBoundingClientRect();
+// 🎯 Initial position (center-ish)
+let posX = window.innerWidth * 0.6;
+let posY = window.innerHeight * 0.7;
 
-  let cursorX = 0;
-  let cursorY = 0;
+// Apply initial position
+noBtn.style.position = "fixed";
+noBtn.style.left = posX + "px";
+noBtn.style.top = posY + "px";
+
+// 😈 Move button logic
+function moveButton(e) {
+  let cursorX, cursorY;
 
   if (e.touches) {
     cursorX = e.touches[0].clientX;
@@ -17,31 +23,29 @@ function moveButton(e) {
     cursorY = e.clientY;
   }
 
-  // Distance from cursor
-  let dx = btnRect.left - cursorX;
-  let dy = btnRect.top - cursorY;
+  // Direction away from cursor
+  let dx = posX - cursorX;
+  let dy = posY - cursorY;
 
-  // Normalize direction (unit vector)
-  const distance = Math.sqrt(dx * dx + dy * dy) || 1;
-  dx /= distance;
-  dy /= distance;
+  const dist = Math.sqrt(dx * dx + dy * dy) || 1;
 
-  // ⚡ Speed (increase for more difficulty)
-  const speed = 150;
+  dx /= dist;
+  dy /= dist;
 
-  let newX = btnRect.left + dx * speed;
-  let newY = btnRect.top + dy * speed;
+  const speed = 120; // 🔥 increase for more speed
 
-  // 🚫 Keep inside screen bounds
-  const maxX = window.innerWidth - btnRect.width;
-  const maxY = window.innerHeight - btnRect.height;
+  posX += dx * speed;
+  posY += dy * speed;
 
-  newX = Math.max(0, Math.min(newX, maxX));
-  newY = Math.max(0, Math.min(newY, maxY));
+  // 🚫 Keep inside screen
+  const btnWidth = noBtn.offsetWidth;
+  const btnHeight = noBtn.offsetHeight;
 
-  noBtn.style.position = "fixed";
-  noBtn.style.left = newX + "px";
-  noBtn.style.top = newY + "px";
+  posX = Math.max(0, Math.min(posX, window.innerWidth - btnWidth));
+  posY = Math.max(0, Math.min(posY, window.innerHeight - btnHeight));
+
+  noBtn.style.left = posX + "px";
+  noBtn.style.top = posY + "px";
 }
 
 // 💻 Desktop
@@ -49,8 +53,8 @@ document.addEventListener("mousemove", (e) => {
   const rect = noBtn.getBoundingClientRect();
 
   const isNear =
-    Math.abs(e.clientX - rect.left) < 120 &&
-    Math.abs(e.clientY - rect.top) < 120;
+    Math.abs(e.clientX - rect.left) < 150 &&
+    Math.abs(e.clientY - rect.top) < 150;
 
   if (isNear) moveButton(e);
 });
