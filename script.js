@@ -2,7 +2,7 @@ const noBtn = document.getElementById("noBtn");
 const yesBtn = document.getElementById("yesBtn");
 const chat = document.getElementById("chat");
 
-// ⚡ Super fast escape logic
+// 📱 Get screen bounds
 function moveButton(e) {
   const btnRect = noBtn.getBoundingClientRect();
 
@@ -17,31 +17,46 @@ function moveButton(e) {
     cursorY = e.clientY;
   }
 
-  const distanceX = btnRect.x - cursorX;
-  const distanceY = btnRect.y - cursorY;
+  // Distance from cursor
+  let dx = btnRect.left - cursorX;
+  let dy = btnRect.top - cursorY;
 
-  // 😈 Run opposite direction FAST
-  const moveX = distanceX * 1.5 + (Math.random() * 100 - 50);
-  const moveY = distanceY * 1.5 + (Math.random() * 80 - 40);
+  // Normalize direction (unit vector)
+  const distance = Math.sqrt(dx * dx + dy * dy) || 1;
+  dx /= distance;
+  dy /= distance;
 
-  noBtn.style.transform = `translate(${moveX}px, ${moveY}px)`;
+  // ⚡ Speed (increase for more difficulty)
+  const speed = 150;
+
+  let newX = btnRect.left + dx * speed;
+  let newY = btnRect.top + dy * speed;
+
+  // 🚫 Keep inside screen bounds
+  const maxX = window.innerWidth - btnRect.width;
+  const maxY = window.innerHeight - btnRect.height;
+
+  newX = Math.max(0, Math.min(newX, maxX));
+  newY = Math.max(0, Math.min(newY, maxY));
+
+  noBtn.style.position = "fixed";
+  noBtn.style.left = newX + "px";
+  noBtn.style.top = newY + "px";
 }
 
-// 💻 Desktop (runs when cursor near)
+// 💻 Desktop
 document.addEventListener("mousemove", (e) => {
   const rect = noBtn.getBoundingClientRect();
 
   const isNear =
-    Math.abs(e.clientX - rect.x) < 120 &&
-    Math.abs(e.clientY - rect.y) < 120;
+    Math.abs(e.clientX - rect.left) < 120 &&
+    Math.abs(e.clientY - rect.top) < 120;
 
   if (isNear) moveButton(e);
 });
 
-// 📱 Mobile (finger tracking)
-document.addEventListener("touchmove", (e) => {
-  moveButton(e);
-});
+// 📱 Mobile
+document.addEventListener("touchmove", moveButton);
 
 // 💖 Yes click
 yesBtn.addEventListener("click", () => {
