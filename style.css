@@ -1,0 +1,73 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #ece5dd;
+}
+
+.chat-container {
+  max-width: 400px;
+  margin: auto;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #efeae2;
+}
+
+.chat-header {
+  background: #075e54;
+  color: white;
+  padding: 15px;
+  font-weight: bold;
+}
+
+.chat-body {
+  flex: 1;
+  padding: 10px;
+  position: relative;
+  overflow-y: auto;
+}
+
+.msg {
+  max-width: 70%;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 10px;
+}
+
+.left {
+  background: white;
+}
+
+.right {
+  background: #dcf8c6;
+  margin-left: auto;
+}
+
+.question {
+  font-weight: bold;
+}
+
+.options {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  text-align: center;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  position: relative;
+}
+
+#yesBtn {
+  background: #25d366;
+  color: white;
+}
+
+#noBtn {
+  background: #ccc;
+}
