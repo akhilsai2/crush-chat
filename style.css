@@ -70,5 +70,7 @@ button {
 
 #noBtn {
   background: #ccc;
-  position: fixed; /* ensures it stays inside viewport */
+  position: fixed;   /* REQUIRED */
+  left: 60%;
+  top: 70%;
 }
